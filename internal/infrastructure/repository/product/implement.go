@@ -3,16 +3,16 @@ package product
 import (
 	"context"
 	"my_project/internal/domain"
+	"my_project/internal/infrastructure/repository/postgres"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type productRepo struct {
-	pool *pgxpool.Pool
+	pool postgres.PgxInterface
 }
 
-func NewProductRepository(pool *pgxpool.Pool) domain.ProductRepository {
+func NewProductRepository(pool postgres.PgxInterface) domain.ProductRepository {
 	return &productRepo{pool: pool}
 }
 

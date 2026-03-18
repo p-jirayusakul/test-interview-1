@@ -205,6 +205,7 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string",
+                    "minLength": 3,
                     "example": "Apple"
                 },
                 "price": {
@@ -226,7 +227,7 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string",
-                    "minLength": 1,
+                    "minLength": 3,
                     "example": "Apple-Edited"
                 },
                 "price": {

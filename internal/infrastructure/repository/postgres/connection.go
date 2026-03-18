@@ -4,8 +4,16 @@ import (
 	"context"
 	"time"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+type PgxInterface interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+	Close()
+}
 
 type Config struct {
 	DSN             string
@@ -14,7 +22,7 @@ type Config struct {
 	MaxConnLifetime time.Duration
 }
 
-func NewPool(ctx context.Context, cfg Config) (*pgxpool.Pool, error) {
+func NewPool(ctx context.Context, cfg Config) (PgxInterface, error) {
 	poolCfg, err := pgxpool.ParseConfig(cfg.DSN)
 	if err != nil {
 		return nil, err

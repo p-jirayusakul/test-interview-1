@@ -8,10 +8,10 @@ import (
 
 func mappingRowToDomain(v *productRow) *domain.Product {
 	return &domain.Product{
-		Id:          pg.PgUUIDToUUID(v.Id),
-		Name:        pg.PgTextToPtString(v.Name),
+		Id:          v.Id,
+		Name:        &v.Name,
 		Description: pg.PgTextToPtString(v.Description),
-		SalePrice:   pg.PgNumToFloat64(v.SalePrice),
-		Price:       pg.PgNumToFloat64(v.Price),
+		SalePrice:   &v.SalePrice,
+		Price:       &v.Price,
 	}
 }

@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -40,7 +39,7 @@ func NewServer() (*http.Server, error) {
 	router := gin.Default()
 
 	docs.SwaggerInfo.BasePath = basePath
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	router.GET("/api-docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	group := router.Group(basePath)
 
 	// init routes
@@ -58,7 +57,7 @@ func NewServer() (*http.Server, error) {
 	return server, nil
 }
 
-func newDatabase(addr string) (*pgxpool.Pool, error) {
+func newDatabase(addr string) (postgres.PgxInterface, error) {
 	conn, err := postgres.NewPool(context.Background(), postgres.Config{
 		DSN:             addr,
 		MaxConns:        5,
@@ -72,7 +71,7 @@ func newDatabase(addr string) (*pgxpool.Pool, error) {
 	return conn, nil
 }
 
-func initProductsHandler(group *gin.RouterGroup, dbConn *pgxpool.Pool) {
+func initProductsHandler(group *gin.RouterGroup, dbConn postgres.PgxInterface) {
 	productRepo := product.NewProductRepository(dbConn)
 	productUseCase := usecase.NewProductUseCase(productRepo)
 	productHandler := apphttp.NewProductHandler(productUseCase)

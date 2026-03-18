@@ -1,11 +1,14 @@
 package product
 
-import "github.com/jackc/pgx/v5/pgtype"
+import (
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
+)
 
 type productRow struct {
-	Id          pgtype.UUID
-	Name        pgtype.Text
+	Id          uuid.UUID
+	Name        string
 	Description pgtype.Text
-	SalePrice   pgtype.Numeric
-	Price       pgtype.Numeric
+	SalePrice   float64
+	Price       float64
 }
