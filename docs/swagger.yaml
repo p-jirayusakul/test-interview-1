@@ -1,0 +1,173 @@
+definitions:
+  my_project_internal_delivery_http_request.CreateProductRequest:
+    properties:
+      description:
+        example: A sweet fruit
+        type: string
+      name:
+        example: Apple
+        type: string
+      price:
+        example: 2.99
+        type: number
+      salePrice:
+        example: 1.99
+        type: number
+    required:
+    - name
+    - price
+    - salePrice
+    type: object
+  my_project_internal_delivery_http_request.UpdateProductRequest:
+    properties:
+      description:
+        example: A sweet fruit edited
+        type: string
+      name:
+        example: Apple-Edited
+        minLength: 1
+        type: string
+      price:
+        example: 2.99
+        type: number
+      salePrice:
+        example: 1.99
+        type: number
+    type: object
+  my_project_internal_delivery_http_response.ProductResponse:
+    properties:
+      description:
+        example: A sweet fruit
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426655440000
+        type: string
+      name:
+        example: Apple
+        type: string
+      price:
+        example: 2.99
+        type: number
+      salePrice:
+        example: 1.99
+        type: number
+    type: object
+  my_project_pkg_response.Response:
+    properties:
+      data: {}
+      errorCode:
+        type: string
+      successful:
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /product:
+    post:
+      consumes:
+      - application/json
+      description: Create a new product with name, description, sale price and price
+      parameters:
+      - description: Product information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/my_project_internal_delivery_http_request.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/my_project_pkg_response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/my_project_internal_delivery_http_response.ProductResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/my_project_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/my_project_pkg_response.Response'
+      summary: Create a new product
+      tags:
+      - product
+  /product/{id}:
+    get:
+      description: Get a product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/my_project_pkg_response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/my_project_internal_delivery_http_response.ProductResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/my_project_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/my_project_pkg_response.Response'
+      summary: Get a product
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      description: Update an existing product with name, description, sale price and
+        price
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/my_project_internal_delivery_http_request.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/my_project_pkg_response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/my_project_internal_delivery_http_response.ProductResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/my_project_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/my_project_pkg_response.Response'
+      summary: Update a product
+      tags:
+      - product
+swagger: "2.0"
